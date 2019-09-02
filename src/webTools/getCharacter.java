@@ -13,25 +13,33 @@ public class getCharacter {
      * @param driver
      * @return
      */
-    private static String[]getCharacter(String ID, WebDriver driver){
+    public static String[]getChar(String ID, iDrive source){
     	
     	String target="http://playinitium.com/odp/viewcharactermini?characterId="+ID;
     	
+    	WebDriver driver=source.getDriver();
+    	
     	driver.get(target);
     	
-    	String[]exile=new String[16];
+    	String[]exile=new String[17];
     	
-    	exile[0]=driver.findElement(By.className("character-display-box-info")).getText();
+    	exile[0]=driver.findElement(By.className("character-display-box-info")).getText().split("\n")[0];
     	exile[1]=driver.findElement(By.name("strength")).getText();   
     	exile[2]=driver.findElement(By.name("dexterity")).getText();    	
-    	exile[3]=driver.findElement(By.name("intelligence")).getText();  
+    	exile[3]=driver.findElement(By.name("intelligence")).getText();
+    	exile[4]=driver.findElement(By.className("character-display-box-info")).getText().split("\n")[1];
     	
     	List<WebElement> itemList=driver.findElements(By.className("main-item-name"));
 		WebElement[]itemIDS=itemList.toArray(new WebElement[itemList.size()]);
 		
 		for(int i=0;i!=itemIDS.length;i++){
 			itemIDS[i]=iDrive.getParent(itemIDS[i],driver);
-			exile[i+4]=itemIDS[i].getAttribute("rel");
+			exile[i+5]=itemIDS[i].getAttribute("rel").split("=")[1];
+			
+			WebElement x=iDrive.getParent(itemIDS[i], driver);
+			WebElement y=iDrive.getParent(x, driver);
+			
+			//System.out.println(exile[i+4]);
 		}
 
     	return exile;

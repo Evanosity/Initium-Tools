@@ -67,4 +67,8 @@ public class iDrive{
 		WebElement parent = (WebElement) ((JavascriptExecutor) driver).executeScript("return arguments[0].parentNode;", child);
 		return parent;
     }
+    
+    public WebDriver getDriver() {
+    	return driver;
+    }
 }

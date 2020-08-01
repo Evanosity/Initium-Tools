@@ -23,14 +23,17 @@ public class getCharacter {
     	
     	String[]exile=new String[17];
     	
+    	//this loads the character's information into memory.
     	exile[0]=driver.findElement(By.className("character-display-box-info")).getText().split("\n")[0];
     	exile[1]=driver.findElement(By.name("strength")).getText();   
     	exile[2]=driver.findElement(By.name("dexterity")).getText();    	
     	exile[3]=driver.findElement(By.name("intelligence")).getText();
     	exile[4]=driver.findElement(By.className("character-display-box-info")).getText().split("\n")[1];
     	
+    	//this loads the item IDs associated with this character, in equip order, into memory.
     	List<WebElement> itemList=driver.findElements(By.className("main-item-name"));
 		WebElement[]itemIDS=itemList.toArray(new WebElement[itemList.size()]);
+		
 		
 		for(int i=0;i!=itemIDS.length;i++){
 			itemIDS[i]=iDrive.getParent(itemIDS[i],driver);
@@ -39,7 +42,6 @@ public class getCharacter {
 			WebElement x=iDrive.getParent(itemIDS[i], driver);
 			WebElement y=iDrive.getParent(x, driver);
 			
-			//System.out.println(exile[i+4]);
 		}
 
     	return exile;

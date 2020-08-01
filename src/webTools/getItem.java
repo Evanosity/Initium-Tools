@@ -2,19 +2,25 @@ package webTools;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
+//this class accepts an item ID and returns a formatted string of that item's relevant information.
 
 public class getItem {
 	
 	private static String[]slotList= {"Helmet","Chest","Shirt","Gloves","Legs","Boots","Ring","Ring","Neck"};
 	
-    public static String getItem(String ID, iDrive source){
+    public static String getItemInfo(String ID, iDrive source){
+    	//if our ID is null, we catch it and return a blank item.
+    	if(ID==null) {
+    		return "0/0/0/0/0/0/NA";
+    	}
     	
-    	WebDriver driver=source.getDriver();
-    	
+    	//these three lines tell chromium to go to the proper webpage
+    	WebDriver driver=source.getDriver(); 	
     	String target="https://www.playinitium.com/odp/viewitemmini?itemId="+ID;
     	driver.get(target);
-    	String exile="";
+    	
+    	String exile=""; //this is the string that we return, full of all the item info.
     	
     	if(!driver.findElement(By.tagName("p")).getText().contains("Cosmetic")){
     		if(!driver.findElements(By.name("dexterityPenalty")).isEmpty()) {
@@ -46,6 +52,7 @@ public class getItem {
     	return exile;
     }
     
+    //this method changes a string damage modifier into a number.
     private static String findModifier(String original) {
     	if(original.equals("None")) {
     		return "0";
@@ -68,12 +75,13 @@ public class getItem {
     	return "";
     }
     
+    //currently unused;
     private static boolean isArmor(String slotName) {
-    	if(slotName.equals("Helmet")||slotName.equals("Chest")||slotName.equals("Shirt")||slotName.equals("Gloves")||slotName.equals("Legs")||slotName.equals("Boots")||slotName.equals("Ring")||slotName.equals("Neck")) {
-    		return true;
+    	for(int i=0;i!=slotList.length;i++) {
+    		if(slotList[i].contains(slotName)) {
+    			return true;
+    		}
     	}
-    	else {
-    		return false;
-    	}
+    	return false;
     }
 }

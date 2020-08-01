@@ -12,14 +12,14 @@ public class iDrive{
 	public static WebDriver driver;
 	
 	/**
-	 * 
+	 * This class creates establishes a connection to the website, and then returns the driver.
 	 * @param drivePath - default "C:\chromedriver.exe"
 	 * @param username
 	 * @param password
 	 */
 	public iDrive(String drivePath, String username, String password) {
 		
-		System.setProperty("webdriver.chrome.driver","C:\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","C:\\chromedriver-3.exe");
 		driver = new ChromeDriver();
     	
         String baseUrl = "http://playinitium.com";
@@ -52,7 +52,7 @@ public class iDrive{
 		loginBut[1].click();
 	}
 	/**
-	 * 
+	 * stops the chromium stuff
 	 */
 	public static void stop() {
 		driver.close();
@@ -67,7 +67,10 @@ public class iDrive{
 		WebElement parent = (WebElement) ((JavascriptExecutor) driver).executeScript("return arguments[0].parentNode;", child);
 		return parent;
     }
-    
+    /**
+     * Returns the driver element, so that we can manipulate the webpage beyond this class.
+     * @return driver
+     */
     public WebDriver getDriver() {
     	return driver;
     }

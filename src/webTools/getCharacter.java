@@ -9,8 +9,8 @@ import org.openqa.selenium.WebElement;
 public class getCharacter {
 	   /**
      * This method will turn a character ID into a string array of all the information about that character.
-     * @param ID
-     * @param driver
+     * @param ID - the ID associated with the character you want to grab.
+     * @param driver - the chromium driver used to load webpages.
      * @return
      */
     public static String[]getChar(String ID, iDrive source){
@@ -41,9 +41,7 @@ public class getCharacter {
 			
 			WebElement x=iDrive.getParent(itemIDS[i], driver);
 			WebElement y=iDrive.getParent(x, driver);
-			
 		}
-
     	return exile;
     }
 }

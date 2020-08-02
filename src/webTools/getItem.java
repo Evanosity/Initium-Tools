@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 //this class accepts an item ID and returns a formatted string of that item's relevant information.
+//I need to fix this to return proper weapon stats.
 
 public class getItem {
 	
@@ -22,7 +23,14 @@ public class getItem {
     	
     	String exile=""; //this is the string that we return, full of all the item info.
     	
+    	//if this is a weapon, we need to return two lines of text. o well.
+    	if(!isArmor(driver.findElement(By.tagName("p")).getText().split(" ")[0])) {
+    		exile+=getWeaponInfo(source)+"\n";
+    	}
+    	
+    	//first, the system checks if the item is a cosmetic. if it is, we split.
     	if(!driver.findElement(By.tagName("p")).getText().contains("Cosmetic")){
+    		//then, we check if there is a dex penalty field. if not, we assume its 0. (damn legacy items)
     		if(!driver.findElements(By.name("dexterityPenalty")).isEmpty()) {
             	exile+=driver.findElement(By.name("dexterityPenalty")).getText().split("\n")[1].split("%")[0]+"/";
         	}
@@ -45,8 +53,37 @@ public class getItem {
             	exile+=driver.findElement(By.name("intelligenceModifier")).getText().split("\n")[1].split("%")[0]+"/";
         	}
         	
-        	exile+=driver.findElement(By.name("itemName")).getText()+"/";
-        	exile+=driver.findElement(By.tagName("p")).getText().split(" ")[0];
+        	exile+=driver.findElement(By.name("itemName")).getText()/*+"/"*/;
+        	//exile+=driver.findElement(By.tagName("p")).getText().split(" ")[0];
+    	}
+    	
+    	return exile;
+    }
+    
+    private static String getWeaponInfo(iDrive source) {
+    	WebDriver driver=source.getDriver(); 	
+    	String exile="";
+    	
+    	exile+=driver.findElement(By.name("weaponDamage")).getText().split("\n")[1].split("/")[0]+"/";
+    	exile=exile.replace("D", "/"); //this is to separate the dice number and the sides of dice.
+    	exile+=driver.findElement(By.name("weaponDamageCriticalChance")).getText().split("\n")[1].split("/")[0].split("%")[0]+"/";
+    	exile+=driver.findElement(By.name("weaponDamageCriticalMultiplier")).getText().split("\n")[1].split("/")[0].split("x")[0]+"/";
+    	
+    	String damageTypes=driver.findElement(By.name("weaponDamageType")).getText().split("\n")[1].split("/")[0];
+    	
+    	//this parses the full damage type and turns it into what the system can read. also, this is where it notates 2h weapons.
+    	damageTypes=damageTypes.toLowerCase();
+    	if(damageTypes.contains("blu")) {
+    		exile+="b";
+    	}
+    	if(damageTypes.contains("sla")) {
+    		exile+="s";
+    	}
+    	if(damageTypes.contains("pie")) {
+    		exile+="p";
+    	}
+    	if(driver.findElement(By.tagName("p")).getText().contains("2")) {
+    		exile+="t";
     	}
     	
     	return exile;
@@ -75,7 +112,7 @@ public class getItem {
     	return "";
     }
     
-    //currently unused;
+    //check to see if its a piece of armor; really, if its a weapon or not.
     private static boolean isArmor(String slotName) {
     	for(int i=0;i!=slotList.length;i++) {
     		if(slotList[i].contains(slotName)) {
